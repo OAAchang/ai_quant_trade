@@ -17,6 +17,10 @@ ai-quant-trade = "ai_quant_trade.cli.main:main"
 [tool.hatch.build.targets.wheel]
 packages = ["src/ai_quant_trade"]
 
+[tool.hatch.build.targets.sdist]
+only-include = ["src/ai_quant_trade", "pyproject.toml", "README.md", "LICENSE"]
+exclude = ["/.gitignore"]
+
 [dependency-groups]
 dev = [
   "mypy>=1.10,<2",

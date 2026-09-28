@@ -1,7 +1,7 @@
 UV := uv run --frozen --offline --group dev
 PY := $(UV) python
 
-.PHONY: install format format-check lint typecheck unit integration coverage import-smoke workflow-check lock-check security audit all
+.PHONY: install format format-check lint typecheck unit integration coverage import-smoke workflow-check lock-check security dist-check audit all
 
 install:
 	uv sync --frozen --group dev
@@ -41,10 +41,13 @@ security:
 	$(PY) scripts/check_secrets.py
 	$(PY) scripts/check_boundaries.py
 
+dist-check:
+	$(PY) scripts/check_dist.py
+
 # Online vulnerability lookup is separate from the deterministic offline suite.
 audit:
 	@audit_file=$$(mktemp); trap 'rm -f "$$audit_file"' EXIT; \
 	uv export --frozen --group dev --no-emit-project --format requirements-txt --output-file "$$audit_file" >/dev/null && \
 	$(UV) pip-audit --requirement "$$audit_file" --disable-pip
 
-all: format-check lint typecheck unit integration coverage import-smoke workflow-check lock-check security
+all: format-check lint typecheck unit integration coverage import-smoke workflow-check lock-check security dist-check

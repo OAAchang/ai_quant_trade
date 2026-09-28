@@ -15,7 +15,7 @@
 | Phase | Scope | Status | Gate |
 |---|---|---|---|
 | 00 | Fork、现状审计与治理基线 | COMPLETE; PR #1 user-merged into Main | GO obtained and merge verified |
-| 01 | 新工程骨架、依赖与 CI | IMPLEMENTED LOCALLY; independent Review pending | Local gates, independent GO, user PR merge |
+| 01 | 新工程骨架、依赖与 CI | Draft PR #2; first Review NO-GO, repair and re-review in progress | Updated CI, independent GO, user PR merge |
 | 02 | 领域模型、账户账本与不变量 | NOT STARTED | Phase 01 GO |
 | 03 | 市场数据、PIT 与历史股票池 | NOT STARTED | Phase 02 GO |
 | 04 | 确定性事件驱动回测 | NOT STARTED | Phase 03 GO |
@@ -35,4 +35,4 @@
 - Branch: `phase-01-foundation-ci`
 - Plan: `docs/plans/PHASE_01_PLAN.md`
 - Status: `docs/status/PHASE_01.md`
-- Required next action: finish Phase 01 verification and independent Review. Do not start Phase 02 before GO and user merge of the Phase 01 PR.
+- Required next action: publish the Phase 01 review fixes, verify updated CI, and obtain independent re-review GO. Do not start Phase 02 before GO and user merge of PR #2.
