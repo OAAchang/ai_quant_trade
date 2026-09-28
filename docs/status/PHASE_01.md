@@ -3,7 +3,7 @@
 - Date: 2026-09-28
 - Branch: `phase-01-foundation-ci`, based on the user-merged Phase 00 `origin/Main` tree (`fec52783f068b19f0d0f821aabcc9ba34b1bbaff`)
 - Implementation: COMPLETE; first independent Review NO-GO findings F-01–F-04 repaired, follow-up independent Review GO, updated hosted CI successful; user merge pending
-- Pull request: draft [#2](https://github.com/OAAchang/ai_quant_trade/pull/2) against the personal Fork's `Main`; no automatic merge
+- Pull request: open and ready for user review [#2](https://github.com/OAAchang/ai_quant_trade/pull/2) against the personal Fork's `Main`; no automatic merge
 - Trading state: `disabled` by default; Phase 01 rejects `live` even with an explicit enable flag; no order, broker, transfer, strategy or backtest implementation
 
 ## Completed scope
@@ -39,7 +39,7 @@ All commands below were run from the project root on macOS with CPython 3.11.14 
 | `git diff --cached --check` | 0 | No whitespace errors in the complete staged Phase 01 diff. |
 | `uv run --frozen --offline --group dev pre-commit run --all-files` | 0 | All four scoped local hooks passed on staged files. |
 
-The deliberate socket-denial test emits one expected `pytest-socket` warning when it attempts a blocked socket. It did not access the network. The CI YAML checker parses and checks required commands; it does **not** simulate all GitHub Actions semantics. Hosted GitHub Actions run [36427212478](https://github.com/OAAchang/ai_quant_trade/actions/runs/36427212478) for repaired PR head `5bcf7b9` completed successfully on Linux, including lock installation, 31 tests, 94.57% branch coverage, offline sdist build/install and the online dependency audit. The earlier head `826270c2` also had a successful run, but that run preceded review repairs and is not the acceptance evidence.
+The deliberate socket-denial test emits one expected `pytest-socket` warning when it attempts a blocked socket. It did not access the network. The CI YAML checker parses and checks required commands; it does **not** simulate all GitHub Actions semantics. Hosted GitHub Actions runs [36427212478](https://github.com/OAAchang/ai_quant_trade/actions/runs/36427212478) for repaired code head `5bcf7b9` and [36428009939](https://github.com/OAAchang/ai_quant_trade/actions/runs/36428009939) after the Review/CI evidence update both completed successfully on Linux, including lock installation, 31 tests, 94.57% branch coverage, offline sdist build/install and the online dependency audit. The earlier head `826270c2` also had a successful run, but that run preceded review repairs and is not the acceptance evidence.
 
 ### Failures found and repaired during implementation
 
