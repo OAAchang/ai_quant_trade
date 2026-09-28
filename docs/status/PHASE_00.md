@@ -2,11 +2,11 @@
 
 ## Status
 
-PARTIAL — the first independent Review returned NO-GO with two P1 and one P2 findings. Remediation is implemented locally; independent re-review remains pending.
+PARTIAL — the first and second independent Reviews returned NO-GO. The first review's findings were remediated; the second identified a P1 lookahead misstatement and a P2 omitted-test inventory. Both are corrected in Phase 00 documents, but a third independent review remains pending.
 
 ## Scope
 
-Established the audit and governance baseline for fork `OAAchang/ai_quant_trade` at upstream snapshot `4e4cb796fab4fe59d7260a7654a6b902ef4d85a9`. The review remediation qualifies the repository and documentation entrypoints and clarifies gate policy. No trading logic, data schema, runtime or example behavior was changed.
+Established the audit and governance baseline for fork `OAAchang/ai_quant_trade` at upstream snapshot `4e4cb796fab4fe59d7260a7654a6b902ef4d85a9`. Review remediation qualifies the repository and documentation entrypoints, clarifies gate policy, corrects the momentum-example lookahead audit, and inventories previously omitted test trees. No trading logic, data schema, runtime or example behavior was changed.
 
 ## Files changed
 
@@ -37,6 +37,8 @@ Established the audit and governance baseline for fork `OAAchang/ai_quant_trade`
 - `README.md`, `README_EN.md`, `docs/index.md`: prominently qualify upstream historical claims and state that live use is not approved.
 - `PLANS.md`, `docs/PROJECT_CHARTER.md`, `docs/acceptance/QUALITY_GATES.md`, `docs/risks/RISK_REGISTER.md`: distinguish current-phase blocking findings from isolated, owned future-phase risks without weakening the Phase 14 release gate.
 - `docs/audit/LICENSE_AND_PROVENANCE.md`, `docs/status/PHASE_00.md`: record review-driven modifications, exact verification commands and finding disposition.
+- `docs/audit/UPSTREAM_INVENTORY.md`, `docs/audit/BASELINE_RESULTS.md`, `docs/audit/REUSE_DECISIONS.md`, `docs/architecture/CURRENT_STATE.md`, `docs/plans/PHASE_00_PLAN.md`: correct the lookahead assessment and state the exact test-discovery boundary.
+- `docs/risks/RISK_REGISTER.md`, `docs/acceptance/QUALITY_GATES.md`, `PLANS.md`: assign the future fix and offline-CI controls; retain the independent GO gate.
 - Local `.git/config` (not a tracked file): added canonical `upstream` fetch URL and set its push URL to `no_push`.
 
 ### Deleted
@@ -90,6 +92,18 @@ The original 2026-09-10 inventory/scan/path rows above are historical summaries,
 
 The independent reviewer separately ran the eight local-fixture tests in a temporary Python 3.11 environment (8/8 passed), selected-source compilation (passed), Flake8 4.0.1 (24 legacy findings), and a default-Python test attempt (missing `pandas`). Its root-dependency dry run was interrupted; this does not supersede the original failed-install record.
 
+### Second-review remediation checks (2026-09-28)
+
+| Exact command | Exit | Result |
+|---|---:|---|
+| `rg -n '^\s*(async )?def test_' egs_aide/看盘神器/v2/tests \| wc -l` | 0 | 156 test functions in the desktop-helper tree; 11 `test_*.py` modules were enumerated |
+| `rg -n '^\s*(async )?def test_' egs_skill/broker-research-analyst/tests \| wc -l` | 0 | Four test functions, including the Eastmoney network test; this command inspects source only |
+| `PYTHONDONTWRITEBYTECODE=1 /tmp/phase00-review-env.Y5dk5n/venv/bin/python -B -m unittest discover -s unit_test -v` | 0 | 8/8 selected local-fixture tests passed; no broader test discovery was attempted |
+| `PYTHONPYCACHEPREFIX=/tmp/phase00-review-pycache-remediation-2 python3 -B -m compileall -q quant_brain egs_trade/vanilla/momentum_rotation unit_test` | 0 | Selected Python sources compiled; cache outside repository |
+| `/tmp/phase00-review-env.Y5dk5n/venv/bin/flake8 quant_brain egs_trade/vanilla/momentum_rotation unit_test --ignore=E501,F541,E266,E402,W503,E731,E203 --quiet` | 1 | Pre-existing lint findings in 11 legacy files; no Python source changed |
+
+The second review identified that `_rebalance()` sizes current-open orders through `_mark_to_market(..., trade_date)` and `_position_value(..., trade_date)`, which reads the final close for `trade_date`. Its read-only mutation reproduction changed only that close while holding open prices and previous-day targets fixed, yet changed opening orders. This is a P1 no-lookahead defect in the existing example, not a passing feature. The Phase 00 response is to document, isolate and assign it to Phase 04; correcting runtime behavior is out of scope here.
+
 ## Acceptance matrix
 
 | Criterion | PASS/FAIL/BLOCKED | Evidence |
@@ -99,17 +113,19 @@ The independent reviewer separately ran the eight local-fixture tests in a tempo
 | Target architecture separates domain/application/ports/adapters/research/runtime | PASS | Target architecture and ADR-0001 |
 | Migration is incremental, source-attributed and reversible | PASS | Plan, provenance policy and ADR rollback |
 | Apache-2.0 obligations are retained and provenance gaps are explicit | PASS | License/provenance document; root `LICENSE` untouched |
-| Existing install/tests/static checks have truthful results | PASS | Baseline report includes PASS and FAIL outcomes |
+| Existing install/tests/static checks have truthful results and an explicit discovery boundary | PASS locally | Baseline report includes PASS/FAIL outcomes; other test trees inventoried but not run |
 | Required risks include lookahead, survivorship, fees, duplicate orders, ledger drift, secrets and broker uncertainty | PASS | Risk register |
 | Required Phase 00 files exist and target-only paths are labeled | PASS | Final required-path validation |
 | Repository and documentation entrypoints do not imply verified live readiness | PASS locally | Safety notices and qualified claims added; independent re-review pending |
 | No new strategy, backtest, factor, OMS or broker implementation | PASS | Git diff scope |
-| Independent reviewer gives GO with no unresolved current-phase P0/P1 finding | BLOCKED | First Review returned NO-GO; remediation awaits re-review; this row records the reviewer outcome rather than deciding it |
+| Independent reviewer gives GO with no unresolved current-phase P0/P1 finding | BLOCKED | First and second Reviews returned NO-GO; third review pending; this row records the reviewer outcome rather than deciding it |
 
 ## Risks and limitations
 
 - The root dependency manifest is not installable in the audited environment; the eight passing tests required a supplemental unpinned environment.
 - Existing code has known fee/metric correctness defects and direct Wind order calls. It is not production-ready.
+- The momentum example leaks same-day final close into opening order sizing. Its eight passing tests do not establish no-lookahead behavior; the example remains reference-only pending Phase 04 correction and mutation proof.
+- Other test trees were not executed. Repository-wide pytest would collect a public Eastmoney network test; Phase 01 CI must scope offline tests explicitly.
 - Data providers, historical/PIT coverage, broker, official API docs, sandbox, production operations and rule sources remain undecided.
 - Third-party provenance for many notebooks, datasets, images, PDFs and snippets is incomplete.
 - The prompt pack has recorded provenance but no included license file; public redistribution rights should be confirmed.
@@ -120,7 +136,9 @@ The independent reviewer separately ran the eight local-fixture tests in a tempo
 - `P1-01` — ACCEPT: added prominent warnings and qualified capability/return statements in the fork's Chinese/English README and MkDocs entrypoint; `P00-08` awaits independent re-review.
 - `P1-02` — ACCEPT: clarified current-phase blocking findings, isolated deferred risks, owner/control requirements and the unconditional Phase 14 release gate across the roadmap, charter, quality gates and risk register.
 - `P2-01` — ACCEPT: recorded exact follow-up inventory, copy-comparison, tracked-path, filename-only secret-scan and whitespace commands above. The original shell transcript is not claimed to have been reconstructed.
-- No finding is self-closed as GO; the first Review decision remains NO-GO until a separate read-only re-review.
+- `R2-P1-01` — ACCEPT: corrected the false no-lookahead claim in inventory/current-state/reuse documents and registered `R-BT-001` with Phase 04 owner, isolation rule and mutation-test gate. The existing strategy is intentionally unchanged in Phase 00.
+- `R2-P2-01` — ACCEPT: inventoried both omitted test trees, stated that they were not run, and registered `R-TEST-002` so Phase 01 CI cannot silently discover the Eastmoney network test.
+- No finding is self-closed as GO; both independent Review decisions remain NO-GO until a new read-only reviewer issues GO.
 
 ## Out-of-scope confirmed
 
@@ -132,4 +150,4 @@ The independent reviewer separately ran the eight local-fixture tests in a tempo
 
 ## Next action
 
-Commit the verified remediation, finish the Phase 00 PR, and request a new read-only re-review of the full branch relative to `Main`. Do not begin Phase 01 until the reviewer gives GO with no unresolved current-phase P0/P1 and the user merges the PR.
+Deliver the verified document-only remediation to the draft Phase 00 PR and request a third read-only review of the full branch relative to `Main`. Do not begin Phase 01 until the reviewer gives GO with no unresolved current-phase P0/P1 and the user merges the PR.
