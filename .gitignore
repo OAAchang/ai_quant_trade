@@ -49,3 +49,7 @@ mlruns
 ly_*
 logsite/
 site/
+
+# Project governance must remain versioned even when a developer's global
+# excludes file ignores Codex instruction files.
+!AGENTS.md
