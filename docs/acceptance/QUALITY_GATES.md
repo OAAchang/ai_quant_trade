@@ -48,12 +48,12 @@ Phase 00 implementation can be COMPLETE while the project-wide baseline remains 
 |---|---|---|---|
 | P01-01 | Python 3.11 target package editable-installs from the committed lock in a clean environment | `uv sync --frozen --offline --group dev` into disposable environment; import and CLI smoke outside repo | PASS locally |
 | P01-02 | Empty layer skeleton and documented dependency direction exist | `src/ai_quant_trade/`, `docs/architecture/DEPENDENCY_RULES.md`, `make security` | PASS locally |
-| P01-03 | One documented command surface covers format, lint, typecheck, unit, integration and all | `Makefile`, `docs/development/SETUP.md`, `make all` | PASS locally |
+| P01-03 | One documented command surface covers format, lint, typecheck, unit, integration, distribution checks and all | `Makefile`, `docs/development/SETUP.md`, `make all` | PASS locally |
 | P01-04 | CI runs scoped checks without provider/broker tests or credentials | `.github/workflows/ci.yml`, `make workflow-check`, pytest socket denial | PASS for local structure; GitHub runner execution pending |
 | P01-05 | Trading mode defaults disabled; invalid and live requests fail closed | `tests/unit/test_settings.py`, no submit path | PASS locally |
 | P01-06 | Package import and CLI help work outside the repository | disposable-environment smoke and `make import-smoke` | PASS locally |
 | P01-07 | Locked dependency audit and secret scan run | `make audit`, `make security` | PASS locally; scan is high-confidence/pattern-only |
-| P01-08 | No trading business code or legacy migration | scoped diff review | PASS locally |
-| P01-09 | Independent reviewer gives GO with no current-phase P0/P1 findings | Separate Phase 01 review task | PENDING |
+| P01-08 | No trading business code or legacy material in new distributions | scoped diff review, wheel/sdist whitelist and sdist-install smoke | PASS locally after F-01 fix; re-review pending |
+| P01-09 | Independent reviewer gives GO with no current-phase P0/P1 findings | Separate Phase 01 review task | FAIL on first Review (F-01 P1); follow-up pending |
 
 Phase 01 must not progress to Phase 02 until P01-09 is PASS and the user merges its PR into the personal Fork's `Main`. The local CI-structure check is not evidence that a GitHub-hosted workflow has executed.
