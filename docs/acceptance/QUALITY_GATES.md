@@ -16,7 +16,7 @@
 | G-02 | Reproducible install | Python 3.11 environment installs from committed lock | clean install command | FAIL |
 | G-03 | Formatting/lint | Formatter check and lint finish without modifying files | CI logs | FAIL |
 | G-04 | Types | Public/core API type check passes | mypy/pyright logs | NOT CONFIGURED |
-| G-05 | Unit behavior | Domain/metrics/rules unit and golden tests pass | pytest report | PARTIAL: momentum only |
+| G-05 | Unit behavior | Domain/metrics/rules unit and golden tests pass | pytest report | PARTIAL: eight selected momentum tests only; other trees unrun |
 | G-06 | Invariants | Property tests prove cash/position conservation, idempotency and replay | seeded test report | NOT CONFIGURED |
 | G-07 | PIT/no-lookahead | Future-data mutation cannot alter earlier signals/orders/fills | mutation test report | NOT CONFIGURED |
 | G-08 | Integration | data → strategy → risk → order → fill → ledger deterministic path | fixture artifact checksums | NOT CONFIGURED |
@@ -38,6 +38,6 @@
 | P00-07 | No new trading behavior or directory rewrite occurred | Git diff review | PASS |
 | P00-08 | No unsupported production/live claim is made | Fork-specific warnings and qualified claims in README, README_EN and docs/index; reviewer must verify | PASS locally; re-review pending |
 | P00-09 | Required files exist and Markdown paths are validated or marked TARGET | Phase validation command | PASS |
-| P00-10 | Independent reviewer gives GO with no current-phase P0/P1 findings | Independent Review Result; this row records the review outcome and is not a prerequisite to issuing it | BLOCKED pending re-review (first review: NO-GO) |
+| P00-10 | Independent reviewer gives GO with no current-phase P0/P1 findings | Independent Review Result; this row records the review outcome and is not a prerequisite to issuing it | BLOCKED pending third review (first and second reviews: NO-GO) |
 
 Phase 00 implementation can be COMPLETE while the project-wide baseline remains red. Phase 01 cannot start until P00-10 is satisfied.
