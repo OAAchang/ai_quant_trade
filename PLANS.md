@@ -6,7 +6,7 @@
 
 - 每个 Phase 使用独立分支、计划、状态报告和 acceptance matrix。
 - 实施与首轮 Review 使用独立会话；首轮 Review 只读，不顺手修改。
-- 未解决 P0/P1、关键验收 BLOCKED、未运行的验证或缺失证据均阻止进入下一阶段。
+- 当前阶段未解决的 P0/P1 review finding、该阶段关键验收 BLOCKED、未运行的必需验证或缺失证据均阻止进入下一阶段。已登记的旧代码/后续阶段风险仅在触发路径与新核心、CI、实盘隔离且有责任阶段和控制门槛时递延；当前改动一旦暴露该风险即成为阻断项，Phase 14 发布前不得留有未解决 P0/P1。
 - `live` 始终默认关闭；没有正式券商文档、授权 sandbox、人工批准和发布门槛时不得实现或调用真实下单。
 - 旧目录是 upstream/reference。新核心逐步进入 `src/ai_quant_trade/`，不得通过一次性重写替换旧仓库。
 
@@ -14,7 +14,7 @@
 
 | Phase | Scope | Status | Gate |
 |---|---|---|---|
-| 00 | Fork、现状审计与治理基线 | IMPLEMENTED — awaiting independent review | Review GO and no P0/P1 |
+| 00 | Fork、现状审计与治理基线 | First Review NO-GO; remediation ready for re-review | Re-review GO and no current-phase P0/P1 findings |
 | 01 | 新工程骨架、依赖与 CI | NOT STARTED | Phase 00 GO |
 | 02 | 领域模型、账户账本与不变量 | NOT STARTED | Phase 01 GO |
 | 03 | 市场数据、PIT 与历史股票池 | NOT STARTED | Phase 02 GO |
@@ -35,4 +35,4 @@
 - Branch: `phase-00-audit-governance`
 - Plan: `docs/plans/PHASE_00_PLAN.md`
 - Status: `docs/status/PHASE_00.md`
-- Required next action: submit Phase 00 to an independent read-only Review; do not start Phase 01 before GO.
+- Required next action: repair the first independent Review findings, obtain read-only re-review GO, then wait for the Phase 00 PR merge before Phase 01.
