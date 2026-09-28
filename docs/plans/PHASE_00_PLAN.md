@@ -9,7 +9,7 @@
 - The repository is licensed under Apache-2.0 and contains 1,110 tracked files, including 180 Python files, 20 notebooks, 22 CSV files, and a large amount of documentation and media.
 - The repository has no `pyproject.toml`, lock file, standard package build metadata, pytest configuration, type-check configuration, or code-test CI workflow.
 - The root `requirements.txt` targets Python 3.8-era packages, while newer example-specific requirements target Python 3.12-era packages. The configured target is Python 3.11, but the current host default is Python 3.9.6.
-- One deterministic local-fixture test module exists at `unit_test/test_momentum_rotation.py`. Most modules and examples have no automated tests.
+- The selected baseline has one deterministic local-fixture module at `unit_test/test_momentum_rotation.py`; separate desktop-helper and broker-research test trees also exist and were not part of that baseline. Most core trading domains lack automated tests.
 - `quant_brain` contains small backtest, fee, metric, portfolio, data-provider, and Wind integration modules. `egs_trade` contains strategy, Qlib, reinforcement-learning, and Wind paper-trading examples.
 - The Wind paper-trading example calls account and order APIs directly and lacks the required OMS, idempotency, reconciliation, fail-closed live gateway, and persistent kill switch.
 - No high-confidence private-key, AWS access-key, or GitHub token pattern was found in tracked non-notebook source files during the initial scan.
