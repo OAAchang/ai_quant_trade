@@ -1,6 +1,6 @@
 # ADR-0002: Python 3.11, uv and an isolated target-package quality gate
 
-- Status: Accepted for Phase 01 implementation; independent review pending
+- Status: Accepted for Phase 01 implementation; independent Review GO on 2026-09-28
 - Date: 2026-09-28
 - Owners: Personal fork maintainer
 - Related Phase: 01
