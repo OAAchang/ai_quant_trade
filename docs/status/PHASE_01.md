@@ -2,19 +2,20 @@
 
 - Date: 2026-09-28
 - Branch: `phase-01-foundation-ci`, based on the user-merged Phase 00 `origin/Main` tree (`fec52783f068b19f0d0f821aabcc9ba34b1bbaff`)
-- Implementation: complete locally; independent Review and hosted CI/PR evidence pending
+- Implementation: first independent Review returned NO-GO; F-01 (P1) and F-02–F-04 (P2) repaired locally, follow-up Review and updated hosted CI pending
+- Pull request: draft [#2](https://github.com/OAAchang/ai_quant_trade/pull/2) against the personal Fork's `Main`; no automatic merge
 - Trading state: `disabled` by default; Phase 01 rejects `live` even with an explicit enable flag; no order, broker, transfer, strategy or backtest implementation
 
 ## Completed scope
 
 - Added an editable-installable `src/ai_quant_trade/` wheel package with empty domain/application/ports/adapters/research/runtime boundaries. The only CLI actions are help and version. Typed settings and JSON logging have behavior tests.
 - Pinned CPython 3.11.14, the Hatchling build backend and a uv development lock. The target package has zero production third-party dependencies; old `requirements.txt` and example trees remain reference-only.
-- Added scoped pytest/socket denial, branch coverage, Ruff, strict mypy, pre-commit hooks, structural GitHub Actions validation, import-boundary and high-confidence secret-pattern checks, and an online locked-dependency vulnerability audit.
+- Added scoped pytest/socket denial, branch coverage, Ruff, strict mypy, pre-commit hooks, structural GitHub Actions validation, import-boundary and high-confidence secret-pattern checks, offline wheel/sdist inspection and sdist-install smoke, and an online locked-dependency vulnerability audit.
 - Added ADR-0002, dependency rules, setup instructions and accurate Fork-specific safety notices. No upstream example, data or trading path was migrated or rewritten.
 
 ## Changed files
 
-- Added: `.python-version`, `pyproject.toml`, `uv.lock`, `Makefile`, `.github/workflows/ci.yml`, `src/ai_quant_trade/**`, `tests/**`, `scripts/check_{boundaries,secrets,workflow}.py`, `docs/plans/PHASE_01_PLAN.md`, `docs/architecture/adr/0002-python-foundation.md`, `docs/architecture/DEPENDENCY_RULES.md`, `docs/development/SETUP.md`, this report.
+- Added: `.python-version`, `pyproject.toml`, `uv.lock`, `Makefile`, `.github/workflows/ci.yml`, `src/ai_quant_trade/**`, `tests/**`, `scripts/check_{boundaries,dist,secrets,workflow}.py`, `docs/plans/PHASE_01_PLAN.md`, `docs/architecture/adr/0002-python-foundation.md`, `docs/architecture/DEPENDENCY_RULES.md`, `docs/development/SETUP.md`, this report.
 - Modified: `.gitignore`, `.pre-commit-config.yaml`, `PLANS.md`, `README.md`, `README_EN.md`, `docs/index.md`, `docs/acceptance/QUALITY_GATES.md`.
 - Deleted: none.
 
@@ -32,18 +33,20 @@ All commands below were run from the project root on macOS with CPython 3.11.14 
 | `cd "$phase01_clean_dir"; "$phase01_clean_dir/venv/bin/python" -c 'import ai_quant_trade; print(ai_quant_trade.__file__)'` | 0 | Imported editable package outside the repository working directory. |
 | `"$phase01_clean_dir/venv/bin/ai-quant-trade" --help` from outside repo | 0 | Only safe help/version options displayed. |
 | `make format` | 0 | Ruff formatted target package/tests/scripts. |
-| `make all` | 0 | 21 files format-checked; Ruff passed; mypy checked 21 files; unit 20/20, integration 2/2, combined 22/22; branch coverage 93.67%; import/help, workflow structure, lock agreement, secret pattern and import boundary checks passed. |
+| Initial committed `make all` | 0 | 21 files checked; unit 20/20, integration 2/2, combined 22/22; branch coverage 93.67%. This did **not** detect the first Review's F-01–F-04. |
+| Repair `make all` | 0 | 23 files format-checked; Ruff passed; mypy checked 23 files; unit 29/29, integration 2/2, combined 31/31; branch coverage 94.57%; import/help, workflow structure, lock agreement, security and new offline distribution build/inspect/install checks passed. |
 | `make audit` | 0 | Locked development dependencies: no known vulnerabilities found at check time. |
 | `git diff --cached --check` | 0 | No whitespace errors in the complete staged Phase 01 diff. |
 | `uv run --frozen --offline --group dev pre-commit run --all-files` | 0 | All four scoped local hooks passed on staged files. |
 
-The deliberate socket-denial test emits one expected `pytest-socket` warning when it attempts a blocked socket. It did not access the network. The CI YAML checker parses and checks required commands; it does **not** simulate all GitHub Actions semantics. Hosted CI has not yet run, so it is pending rather than PASS.
+The deliberate socket-denial test emits one expected `pytest-socket` warning when it attempts a blocked socket. It did not access the network. The CI YAML checker parses and checks required commands; it does **not** simulate all GitHub Actions semantics. The hosted GitHub Actions run for the **initial** PR head `826270c2` completed successfully (run `36426100699`), but it predates the review fixes; updated-head CI remains pending.
 
 ### Failures found and repaired during implementation
 
 - The first `make all` exited 1 on a Ruff `UP022` warning in the secret checker. The script was corrected; the final `make all` exited 0.
 - The first audit invocation used `pip-audit --disable-pip` without a requirements input and exited 2. The command was corrected to audit a uv-exported locked requirements file.
 - Audit of the initial lock exited 1 because pytest 8.4.2 was reported under `PYSEC-2026-1845`. The pytest constraint was raised to `>=9.0.3,<10`, the lock regenerated, and the final audit exited 0. This is a point-in-time finding, not a claim that future advisories are impossible.
+- The first independent Review of `d690791` returned NO-GO (F-01 P1; F-02–F-04 P2). It demonstrated that an initial `uv build --sdist --offline` exited 0 yet created an 81 MB archive of 1,160 files including old broker material. Hatchling `only-include` now reduces the source archive to about 18 KB and 17 files; `make dist-check` checks both archive member sets and installs from the sdist outside the repository. Domain import rules and logging redaction/exception preservation received explicit negative tests. These are local fixes only until re-reviewed and re-run by hosted CI.
 
 ## Phase 01 acceptance matrix
 
@@ -54,14 +57,15 @@ The deliberate socket-denial test emits one expected `pytest-socket` warning whe
 | Documented single command surface | PASS locally | `Makefile`, setup guide and final `make all` |
 | Scoped offline tests, no real broker/provider calls | PASS locally | pytest paths, default socket denial, negative socket test, no broker adapter code |
 | Settings default disabled; invalid and live requests fail closed | PASS locally | Unit tests include unauthorized and explicitly flagged live requests |
-| Format, lint, typecheck, pytest, coverage and package/CLI smoke | PASS locally | Final `make all`, 22 tests and 93.67% branch coverage |
+| Format, lint, typecheck, pytest, coverage and package/CLI smoke | PASS locally | Repair `make all`, 31 tests and 94.57% branch coverage |
+| Source and wheel distributions exclude historical code | PASS locally; re-review pending | `make dist-check`, 17-file sdist, sdist install/import/help outside repo |
 | Secret scan and locked dependency audit | PASS locally | `make security` within `make all`; final `make audit` |
-| GitHub Actions workflow syntax/structure and local reproducibility | PASS locally; hosted run PENDING | `make workflow-check`, `make all`, `make audit`; no GitHub-runner result yet |
-| Independent no-P0/P1 review | PENDING | Separate read-only reviewer must inspect branch before GO |
+| GitHub Actions workflow syntax/structure and local reproducibility | PASS locally; updated hosted run PENDING | `make workflow-check`, `make all`, `make audit`; initial-head hosted run passed, repair-head run not yet available |
+| Independent no-P0/P1 review | FAIL on first Review; re-review pending | Separate read-only Review found F-01 P1 and F-02–F-04 P2; fixes not yet independently checked |
 
 ## Risks, limits and next actions
 
 - The current secret scan matches high-confidence patterns in tracked/untracked text; it does not scan Git history, binary blobs or arbitrary entropy. The dependency audit depends on a current external vulnerability service. A future phase must expand supply-chain controls and produce an SBOM before any production release.
-- The AST boundary check does not prove absence of dynamic imports or arbitrary side effects. Code review remains necessary. The wheel and CI deliberately exclude old upstream examples; their defects and incompatible dependencies remain historical risks, not Phase 01 passes.
+- The AST boundary check does not prove absence of dynamic imports or arbitrary side effects. Code review remains necessary. The wheel, sdist and CI deliberately exclude old upstream examples; their defects and incompatible dependencies remain historical risks, not Phase 01 passes. Logging redaction supports specified common formats, not arbitrary secrets.
 - Local pytest socket denial does not sandbox arbitrary subprocesses. The only subprocess-based integration checks invoke the installed CLI help/version, and there is no provider/broker implementation. New subprocess tests require review.
-- Hosted CI and independent review remain pending. No Phase 01 GO or permission to start Phase 02 is claimed. Next: review the staged diff, publish the Phase 01 PR, obtain independent Review GO, fix any findings, then wait for the user's merge into the personal Fork's `Main`.
+- Updated-head hosted CI and independent re-review remain pending. No Phase 01 GO or permission to start Phase 02 is claimed. Next: publish the repair commit to draft PR #2, obtain updated CI success and independent Review GO, then wait for the user's merge into the personal Fork's `Main`.
