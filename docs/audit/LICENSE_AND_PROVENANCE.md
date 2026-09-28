@@ -27,10 +27,11 @@ This document is engineering provenance guidance, not legal advice. Ambiguous th
 | Target | Source | Source identity | Modification | License/provenance status |
 |---|---|---|---|---|
 | `AGENTS.md` | `codex_quant_system_prompt_pack/AGENTS.md` | User-provided `codex_quant_system_prompt_pack.zip`, received 2026-09-10 | Exact copy | Source recorded; no license file present in pack; internal project use explicitly requested by repository owner |
-| `docs/PROJECT_CHARTER.md` | `codex_quant_system_prompt_pack/PROJECT_CHARTER.md` | Same local prompt pack | Exact copy | Same limitation as above |
+| `docs/PROJECT_CHARTER.md` | `codex_quant_system_prompt_pack/PROJECT_CHARTER.md` | Same local prompt pack | Original copy; Phase 00 review remediation clarifies current-phase findings versus isolated legacy risks in the release principle | Same limitation as above; modification documented |
 | `docs/PROJECT_CONTEXT.md` | `codex_quant_system_prompt_pack/PROJECT_CONTEXT_TEMPLATE.md` | Same local prompt pack | Filled repository, branch, OS and target-stack fields | Same limitation as above; modifications documented |
 | `docs/templates/*` | `codex_quant_system_prompt_pack/templates/*` | Same local prompt pack | Exact copies | Same limitation as above |
 | Phase 00 audit/architecture/risk/status documents | Generated for this fork from observed repository facts | Branch `phase-00-audit-governance` | New project documentation | Project-authored; factual sources cited by path/commit |
+| `README.md`, `README_EN.md`, `docs/index.md` | Upstream files at audited commit `4e4cb796fab4fe59d7260a7654a6b902ef4d85a9` | Apache-2.0 fork history | Phase 00 review remediation adds prominent fork-specific safety status and qualifies historical claims; tutorials remain as upstream reference | Root license and upstream history retained |
 
 Before public redistribution of prompt-pack text outside this repository workflow, the owner should confirm its license. No assumption is made that the prompt pack is covered by the upstream repository's Apache-2.0 license.
 
