@@ -22,7 +22,7 @@
 | G-08 | Integration | data → strategy → risk → order → fill → ledger deterministic path | fixture artifact checksums | NOT CONFIGURED |
 | G-09 | Broker contract | All adapters satisfy states, duplicate/late/unknown and recovery cases | offline contract suite | NOT CONFIGURED |
 | G-10 | Secrets/supply chain | Secret scan, dependency audit, licenses and SBOM pass/are reviewed | CI artifacts | PARTIAL |
-| G-11 | Documentation | Context, ADR, schema, migration, commands and implementation agree | path/link validation + review | Phase 00 remediation awaiting re-review |
+| G-11 | Documentation | Context, ADR, schema, migration, commands and implementation agree | path/link validation + review | Phase 00 governance reviewed GO; future implementation not yet assessed |
 | G-12 | Live fail-closed | Missing any explicit mode/account/session/data/broker/reconciliation/approval gate prevents submit | negative tests | NOT IMPLEMENTED |
 
 ## Phase 00 acceptance
@@ -36,8 +36,8 @@
 | P00-05 | Existing tests/install/static checks have honest outcomes | `docs/audit/BASELINE_RESULTS.md` | PASS |
 | P00-06 | Required risk classes are registered | `docs/risks/RISK_REGISTER.md` | PASS |
 | P00-07 | No new trading behavior or directory rewrite occurred | Git diff review | PASS |
-| P00-08 | No unsupported production/live claim is made | Fork-specific warnings and qualified claims in README, README_EN and docs/index; reviewer must verify | PASS locally; re-review pending |
+| P00-08 | No unsupported production/live claim is made | Fork-specific warnings and qualified claims in README, README_EN and docs/index; third reviewer verified | PASS |
 | P00-09 | Required files exist and Markdown paths are validated or marked TARGET | Phase validation command | PASS |
-| P00-10 | Independent reviewer gives GO with no current-phase P0/P1 findings | Independent Review Result; this row records the review outcome and is not a prerequisite to issuing it | BLOCKED pending third review (first and second reviews: NO-GO) |
+| P00-10 | Independent reviewer gives GO with no current-phase P0/P1 findings | Independent Review Result in Codex task `01a0e767-887a-7e83-8ed5-3c568fd98652`; first and second reviews were NO-GO | PASS — third independent Review GO |
 
-Phase 00 implementation can be COMPLETE while the project-wide baseline remains red. Phase 01 cannot start until P00-10 is satisfied.
+Phase 00 implementation can be COMPLETE while the project-wide baseline remains red. Phase 01 cannot start until P00-10 is satisfied **and** the user merges the Phase 00 PR into the personal Fork's `Main`.
