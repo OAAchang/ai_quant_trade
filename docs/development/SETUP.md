@@ -23,10 +23,11 @@ make audit
 | `make workflow-check` | Parse CI YAML and assert required jobs/commands; not a full GitHub-runner simulation |
 | `make lock-check` | Verify lock/manifest agreement offline |
 | `make security` | High-confidence credential scan plus AST dependency check |
+| `make dist-check` | Offline wheel/sdist build, archive whitelist validation, and sdist install/import/CLI smoke |
 | `make audit` | Online vulnerability lookup for hashed locked development dependencies |
 | `make all` | Deterministic offline gates above, excluding online audit |
 
-The `pytest` default test path is `tests/`, and `--disable-socket` is enabled even when pytest is invoked directly. The network-denial plugin does not sandbox arbitrary subprocesses, so additions to integration tests must be reviewed for external calls. Do **not** run `pytest` over the full upstream tree as a CI shortcut: `egs_skill/broker-research-analyst/tests/test_adapter.py` contains an Eastmoney call not skipped under pytest.
+The `pytest` default test path is `tests/`, and `--disable-socket` is enabled even when pytest is invoked directly. The network-denial plugin does not sandbox arbitrary subprocesses, so additions to integration tests must be reviewed for external calls. Do **not** run `pytest` over the full upstream tree as a CI shortcut: `egs_skill/broker-research-analyst/tests/test_adapter.py` contains an Eastmoney call not skipped under pytest. The distribution check accepts only target-package Python files and minimal build metadata; it does not package legacy examples, tests or the prompt pack.
 
 ## Dependency choices
 
@@ -43,6 +44,8 @@ There are **no production third-party runtime dependencies** in Phase 01. The de
 | pip-audit | Audit locked development dependencies | Apache-2.0 | Dependabot/GitHub advisories; online database availability can fail independently of tests |
 
 `make audit` initially found a known vulnerability in pytest 8.4.2. The constraint was raised to pytest 9.0.3 or later and the lock was regenerated; the subsequent locked audit found no known vulnerabilities. This is point-in-time evidence, not a guarantee against future advisories. The scanner deliberately reports file paths, not candidate secret values, and does not inspect Git history or binary assets.
+
+The first independent Phase 01 Review found that the initial wheel was isolated but its source archive included old repository material. The sdist was restricted via Hatchling `only-include`, and `make dist-check` now inspects both artifacts and smoke-installs the sdist. The same review found gaps in domain import checks and JSON logging; these received negative tests. A follow-up independent Review is still required before GO.
 
 ## Safety boundary
 
