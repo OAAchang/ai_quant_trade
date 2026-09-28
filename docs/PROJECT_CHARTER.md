@@ -53,4 +53,4 @@ V1.0 不追求：
 
 ## 发布原则
 
-每个 Phase 一个 branch/PR。实施会话和 review 会话分开。只有 reviewer 给出 GO 且没有 P0/P1，才能进入下一阶段。
+每个 Phase 一个 branch/PR。实施会话和 review 会话分开。只有 reviewer 给出 GO、当前阶段没有未解决的 P0/P1 finding 且关键验收无 BLOCKED，才能进入下一阶段。已登记的旧代码风险仅可按质量门槛的隔离与递延规则处理；Phase 14 发布前不得留有未解决的 P0/P1 风险。

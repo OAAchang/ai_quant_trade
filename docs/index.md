@@ -4,7 +4,9 @@
   <img src="https://raw.githubusercontent.com/charliedream1/ai_quant_trade/master/.README_images/LOGO_NEW.png" width="200" alt="logo" />
 </p>
 
-> **一站式AI量化交易平台 · 从学习、模拟到实盘**
+> **上游量化学习资料与示例；本 Fork 的受控 A 股研究平台仍在建设中。**
+
+> **安全状态（Phase 00）：** 本站保留的上游功能、策略和回测介绍仅供学习与审计，不能证明当前 Fork 可连接真实账户或安全下单。旧示例未通过统一数据时点、交易规则、风控、OMS、账本和券商对账验收；真实下单默认关闭，历史收益不构成投资建议或收益保证。见 [Phase 00 状态](status/PHASE_00.md) 与 [质量门槛](acceptance/QUALITY_GATES.md)。
 
 欢迎来到 AI量化交易操盘手 的在线文档站！本站由 [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) 驱动，源码托管在 [GitHub](https://github.com/charliedream1/ai_quant_trade)。
 
@@ -14,7 +16,7 @@
 
 | 定位 | 说明 |
 |:---:|---|
-| 一站式平台 | 从学习、模拟到实盘，全流程覆盖 |
+| 学习与研究资料 | 保留上游示例；受控研究与交易核心仍在分阶段建设 |
 | 多元策略 | 大模型、因子挖掘、传统策略、机器学习、深度学习、强化学习、图网络、高频交易 |
 | 资源汇总 | 全网资源汇总、实战案例、论文解读、代码实现 |
 | 辅助工具 | 辅助盯盘、股票推荐等实用操盘工具 |
