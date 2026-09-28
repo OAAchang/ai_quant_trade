@@ -45,7 +45,7 @@ There are **no production third-party runtime dependencies** in Phase 01. The de
 
 `make audit` initially found a known vulnerability in pytest 8.4.2. The constraint was raised to pytest 9.0.3 or later and the lock was regenerated; the subsequent locked audit found no known vulnerabilities. This is point-in-time evidence, not a guarantee against future advisories. The scanner deliberately reports file paths, not candidate secret values, and does not inspect Git history or binary assets.
 
-The first independent Phase 01 Review found that the initial wheel was isolated but its source archive included old repository material. The sdist was restricted via Hatchling `only-include`, and `make dist-check` now inspects both artifacts and smoke-installs the sdist. The same review found gaps in domain import checks and JSON logging; these received negative tests. A follow-up independent Review is still required before GO.
+The first independent Phase 01 Review found that the initial wheel was isolated but its source archive included old repository material. The sdist was restricted via Hatchling `only-include`, and `make dist-check` now inspects both artifacts and smoke-installs the sdist. The same review found gaps in domain import checks and JSON logging; these received negative tests. The follow-up independent Review verified the fixes and gave GO; PR #2 still requires the user's merge into `Main`.
 
 ## Safety boundary
 
