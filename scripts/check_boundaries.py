@@ -2,6 +2,7 @@
 
 import argparse
 import ast
+import sys
 from pathlib import Path
 
 LAYERS = {"domain", "ports", "application", "adapters", "research", "runtime", "cli"}
@@ -15,19 +16,26 @@ ALLOWED = {
     "runtime": {"runtime", "application", "ports", "domain", "adapters", "research"},
     "cli": LAYERS,
 }
-DOMAIN_FORBIDDEN = {
-    "pandas",
-    "numpy",
-    "sqlalchemy",
-    "duckdb",
-    "requests",
-    "httpx",
-    "tushare",
-    "WindPy",
-    "socket",
-    "sqlite3",
-    "psycopg",
-    "PyQt5",
+# Deliberately small: additions to domain's standard-library surface need review.
+DOMAIN_ALLOWED_STDLIB = {
+    "abc",
+    "collections",
+    "dataclasses",
+    "datetime",
+    "decimal",
+    "enum",
+    "fractions",
+    "functools",
+    "itertools",
+    "json",
+    "math",
+    "operator",
+    "re",
+    "statistics",
+    "typing",
+    "types",
+    "uuid",
+    "zoneinfo",
 }
 
 
@@ -53,8 +61,9 @@ def check_source(path: Path, package_root: Path) -> list[str]:
             if module is None:
                 continue
             top = module.split(".", 1)[0]
-            if source_layer == "domain" and top in DOMAIN_FORBIDDEN:
-                violations.append(f"{path}:{node.lineno}: domain imports forbidden {module}")
+            if source_layer == "domain" and top != "ai_quant_trade":
+                if top not in sys.stdlib_module_names or top not in DOMAIN_ALLOWED_STDLIB:
+                    violations.append(f"{path}:{node.lineno}: domain imports forbidden {module}")
             if not module.startswith("ai_quant_trade."):
                 continue
             parts = module.split(".")
@@ -67,6 +76,10 @@ def check_source(path: Path, package_root: Path) -> list[str]:
                 )
                 continue
             if target_layer not in LAYERS:
+                if target_layer not in OUTER_ROOT_MODULES and target_layer != "__version__":
+                    violations.append(
+                        f"{path}:{node.lineno}: {source_layer} imports unclassified {target_layer}"
+                    )
                 continue
             if target_layer not in ALLOWED[source_layer]:
                 violations.append(
