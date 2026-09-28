@@ -6,7 +6,7 @@
 
 > **上游量化学习资料与示例；本 Fork 的受控 A 股研究平台仍在建设中。**
 
-> **安全状态（Phase 00）：** 本站保留的上游功能、策略和回测介绍仅供学习与审计，不能证明当前 Fork 可连接真实账户或安全下单。旧示例未通过统一数据时点、交易规则、风控、OMS、账本和券商对账验收；真实下单默认关闭，历史收益不构成投资建议或收益保证。见 [Phase 00 状态](status/PHASE_00.md) 与 [质量门槛](acceptance/QUALITY_GATES.md)。
+> **安全状态（Phase 01）：** 新 Python 包仅有可安装骨架、配置、日志和 CLI help，不具备策略、回测或交易能力。本站保留的上游功能、策略和回测介绍仅供学习与审计，不能证明当前 Fork 可连接真实账户或安全下单。旧示例未通过统一数据时点、交易规则、风控、OMS、账本和券商对账验收；新包拒绝 live 模式，历史收益不构成投资建议或收益保证。见 [Phase 01 状态](status/PHASE_01.md)、[开发安装](development/SETUP.md) 与 [质量门槛](acceptance/QUALITY_GATES.md)。
 
 欢迎来到 AI量化交易操盘手 的在线文档站！本站由 [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) 驱动，源码托管在 [GitHub](https://github.com/charliedream1/ai_quant_trade)。
 
@@ -28,6 +28,7 @@
 本在线文档站收录教程类、操作类与社区类内容。项目的完整代码与各模块说明在 GitHub 仓库中查看：
 
 - **[项目总览 README](https://github.com/charliedream1/ai_quant_trade#readme)** — 功能特性、目录结构、快速开始
+- **[本 Fork 工程骨架安装](development/SETUP.md)** — Phase 01 新包的锁定安装、离线检查和安全边界
 - **[券商研报分析 Skill](https://github.com/charliedream1/ai_quant_trade/tree/master/egs_skill/broker-research-analyst)** — 自动抓取东方财富研报、PDF 解析、报告生成
   - [方案设计](https://github.com/charliedream1/ai_quant_trade/blob/master/egs_skill/PROPOSAL.md)
   - [PDF 解析调研](https://github.com/charliedream1/ai_quant_trade/blob/master/egs_skill/PDF_PARSER_RESEARCH.md)

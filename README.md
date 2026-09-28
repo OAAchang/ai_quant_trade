@@ -9,7 +9,7 @@
 [**ENGLISH VERSION**](https://github.com/charliedream1/ai_quant_trade/blob/master/README_EN.md)
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Python-Version](https://img.shields.io/badge/Python-3.8+-brightgreen)](https://github.com/charliedream1/ai_quant_trade)
+[![Target-Python](https://img.shields.io/badge/Target%20Python-3.11-blue)](docs/development/SETUP.md)
 [![Stars](https://img.shields.io/github/stars/charliedream1/ai_quant_trade?style=social)](https://github.com/charliedream1/ai_quant_trade)
 
 <p>
@@ -24,7 +24,7 @@
 
 </div>
 
-> **本 Fork 的安全状态（Phase 00）：** 下文保留上游的历史教程、功能介绍与回测展示，供学习和审计，不代表本 Fork 已实现或通过实盘验收。旧示例未经统一的时点数据、交易规则、风控、OMS、账本与券商对账验证；请勿将其连接真实账户或据此下单。回测收益不是投资建议或未来收益保证。当前阶段状态与门槛见 [Phase 00 报告](docs/status/PHASE_00.md) 和 [质量门槛](docs/acceptance/QUALITY_GATES.md)。
+> **本 Fork 的安全状态（Phase 01）：** 新增的 Python 包目前只有安装、检查、配置、日志和 CLI help 骨架，没有策略、回测或交易能力。下文保留上游的历史教程、功能介绍与回测展示，供学习和审计，不代表本 Fork 已通过实盘验收。旧示例未经统一的时点数据、交易规则、风控、OMS、账本与券商对账验证；请勿将其连接真实账户或据此下单。回测收益不是投资建议或未来收益保证。见 [Phase 01 状态](docs/status/PHASE_01.md)、[开发安装](docs/development/SETUP.md) 和 [质量门槛](docs/acceptance/QUALITY_GATES.md)。
 
 ---
 
@@ -128,18 +128,18 @@ ai_quant_trade
 
 ## 🚀 快速开始
 
-本仓库暂未封装为 Python 包，请克隆整个项目后，进入各 `egs` 目录查看详细的 **使用说明** 和 **原理介绍**。
+本 Fork 新增的 `ai_quant_trade` 包是无交易能力的工程骨架。请从个人 Fork 安装；以下命令仅检查可安装性和 CLI help，不运行上游示例。
 
 ```bash
-# 1. 克隆仓库
-git clone https://github.com/charliedream1/ai_quant_trade.git
-
-# 2. 安装依赖
-pip install -r requirements.txt
-
-# 3. 进入对应示例目录，查看 README 开始使用
-cd egs_trade/rl/a002_finRL_tutorial/a01_Stock_NeurIPS2018
+git clone https://github.com/OAAchang/ai_quant_trade.git
+cd ai_quant_trade
+uv python install 3.11.14
+uv sync --frozen --group dev
+make all
+uv run --frozen --offline ai-quant-trade --help
 ```
+
+旧 `requirements.txt` 和 `egs` 教程仅作历史参考，不属于新包的可重复安装或 CI 验收范围。完整说明见 [开发安装](docs/development/SETUP.md)。
 
 ---
 

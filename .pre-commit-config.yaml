@@ -1,12 +1,28 @@
 repos:
--   repo: https://github.com/psf/black
-    rev: 22.1.0
+  # Phase 01 checks deliberately exclude the unchanged upstream example tree.
+  - repo: local
     hooks:
-    -   id: black
-        args: ["qlib", "-l 120"]
-
--   repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
-    hooks:
-        - id: flake8
-          args: ["--ignore=E501,F541,E266,E402,W503,E731,E203"]
+      - id: target-format-check
+        name: target package format check
+        entry: make format-check
+        language: system
+        pass_filenames: false
+        files: ^(src/ai_quant_trade/|tests/|scripts/|pyproject\.toml|uv\.lock|Makefile|\.github/workflows/ci\.yml)
+      - id: target-lint
+        name: target package lint
+        entry: make lint
+        language: system
+        pass_filenames: false
+        files: ^(src/ai_quant_trade/|tests/|scripts/|pyproject\.toml)
+      - id: target-typecheck
+        name: target package typecheck
+        entry: make typecheck
+        language: system
+        pass_filenames: false
+        files: ^(src/ai_quant_trade/|tests/|scripts/|pyproject\.toml)
+      - id: target-security
+        name: target secrets and dependency boundary
+        entry: make security
+        language: system
+        pass_filenames: false
+        files: ^(src/ai_quant_trade/|tests/|scripts/|pyproject\.toml|uv\.lock|\.github/workflows/ci\.yml)

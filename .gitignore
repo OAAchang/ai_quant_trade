@@ -53,3 +53,12 @@ site/
 # Project governance must remain versioned even when a developer's global
 # excludes file ignores Codex instruction files.
 !AGENTS.md
+
+# Phase 01 target-package development artifacts
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+dist/

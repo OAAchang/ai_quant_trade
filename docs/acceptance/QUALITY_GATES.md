@@ -13,17 +13,17 @@
 | ID | Capability | Criterion | Required evidence | Current baseline |
 |---|---|---|---|---|
 | G-01 | Repository safety | Work occurs in personal fork; canonical upstream is fetch-only/no-push | remotes, branch and SHA | PASS |
-| G-02 | Reproducible install | Python 3.11 environment installs from committed lock | clean install command | FAIL |
-| G-03 | Formatting/lint | Formatter check and lint finish without modifying files | CI logs | FAIL |
-| G-04 | Types | Public/core API type check passes | mypy/pyright logs | NOT CONFIGURED |
-| G-05 | Unit behavior | Domain/metrics/rules unit and golden tests pass | pytest report | PARTIAL: eight selected momentum tests only; other trees unrun |
+| G-02 | Reproducible install | Python 3.11 environment installs from committed lock | clean install command | PASS for Phase 01 target package; legacy tree excluded |
+| G-03 | Formatting/lint | Formatter check and lint finish without modifying files | CI logs | PASS locally and on hosted CI for Phase 01 paths |
+| G-04 | Types | Public/core API type check passes | mypy/pyright logs | PASS locally and on hosted CI for Phase 01 paths; later core unimplemented |
+| G-05 | Unit behavior | Domain/metrics/rules unit and golden tests pass | pytest report | PARTIAL: Phase 01 settings/logging/tooling tests pass; domain/metrics/rules absent |
 | G-06 | Invariants | Property tests prove cash/position conservation, idempotency and replay | seeded test report | NOT CONFIGURED |
 | G-07 | PIT/no-lookahead | Future-data mutation cannot alter earlier signals/orders/fills | mutation test report | NOT CONFIGURED |
 | G-08 | Integration | data → strategy → risk → order → fill → ledger deterministic path | fixture artifact checksums | NOT CONFIGURED |
 | G-09 | Broker contract | All adapters satisfy states, duplicate/late/unknown and recovery cases | offline contract suite | NOT CONFIGURED |
-| G-10 | Secrets/supply chain | Secret scan, dependency audit, licenses and SBOM pass/are reviewed | CI artifacts | PARTIAL |
-| G-11 | Documentation | Context, ADR, schema, migration, commands and implementation agree | path/link validation + review | Phase 00 governance reviewed GO; future implementation not yet assessed |
-| G-12 | Live fail-closed | Missing any explicit mode/account/session/data/broker/reconciliation/approval gate prevents submit | negative tests | NOT IMPLEMENTED |
+| G-10 | Secrets/supply chain | Secret scan, dependency audit, licenses and SBOM pass/are reviewed | CI artifacts | PARTIAL: Phase 01 pattern scan and locked audit pass; history/binary/SBOM not covered |
+| G-11 | Documentation | Context, ADR, schema, migration, commands and implementation agree | path/link validation + review | Phase 00 and Phase 01 independent Review GO; later implementation not yet assessed |
+| G-12 | Live fail-closed | Missing any explicit mode/account/session/data/broker/reconciliation/approval gate prevents submit | negative tests | PARTIAL: Phase 01 rejects live and has no submit path; later system gate not implemented |
 
 ## Phase 00 acceptance
 
@@ -41,3 +41,19 @@
 | P00-10 | Independent reviewer gives GO with no current-phase P0/P1 findings | Independent Review Result in Codex task `01a0e767-887a-7e83-8ed5-3c568fd98652`; first and second reviews were NO-GO | PASS — third independent Review GO |
 
 Phase 00 implementation can be COMPLETE while the project-wide baseline remains red. Phase 01 cannot start until P00-10 is satisfied **and** the user merges the Phase 00 PR into the personal Fork's `Main`.
+
+## Phase 01 acceptance
+
+| ID | Criterion | Evidence | Status |
+|---|---|---|---|
+| P01-01 | Python 3.11 target package editable-installs from the committed lock in a clean environment | `uv sync --frozen --offline --group dev` into disposable environment; import and CLI smoke outside repo | PASS locally |
+| P01-02 | Empty layer skeleton and documented dependency direction exist | `src/ai_quant_trade/`, `docs/architecture/DEPENDENCY_RULES.md`, `make security` | PASS locally |
+| P01-03 | One documented command surface covers format, lint, typecheck, unit, integration, distribution checks and all | `Makefile`, `docs/development/SETUP.md`, `make all` | PASS locally |
+| P01-04 | CI runs scoped checks without provider/broker tests or credentials | `.github/workflows/ci.yml`, `make workflow-check`, pytest socket denial, hosted run 36427212478 | PASS |
+| P01-05 | Trading mode defaults disabled; invalid and live requests fail closed | `tests/unit/test_settings.py`, no submit path | PASS locally |
+| P01-06 | Package import and CLI help work outside the repository | disposable-environment smoke and `make import-smoke` | PASS locally |
+| P01-07 | Locked dependency audit and secret scan run | `make audit`, `make security` | PASS locally; scan is high-confidence/pattern-only |
+| P01-08 | No trading business code or legacy material in new distributions | scoped diff review, wheel/sdist whitelist and sdist-install smoke | PASS — independent Review verified |
+| P01-09 | Independent reviewer gives GO with no current-phase P0/P1 findings | Review task `01a0e814-df8e-7ab1-9c4e-766ec9d2daf5` | PASS — first Review NO-GO, follow-up GO after fixes |
+
+Phase 01 must not progress to Phase 02 until the user merges PR #2 into the personal Fork's `Main` and the merged tree is verified. The hosted CI result is scoped to the Phase 01 head; it does not certify future trading behavior.
