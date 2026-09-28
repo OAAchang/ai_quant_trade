@@ -14,8 +14,8 @@
 
 | Phase | Scope | Status | Gate |
 |---|---|---|---|
-| 00 | Fork、现状审计与治理基线 | First and second Reviews NO-GO; second remediation under verification | Third Review GO and no current-phase P0/P1 findings |
-| 01 | 新工程骨架、依赖与 CI | NOT STARTED | Phase 00 GO |
+| 00 | Fork、现状审计与治理基线 | Independent Review GO; PR #1 awaits user merge | GO obtained; user merge required before Phase 01 |
+| 01 | 新工程骨架、依赖与 CI | NOT STARTED | Phase 00 GO and user merge of PR #1 |
 | 02 | 领域模型、账户账本与不变量 | NOT STARTED | Phase 01 GO |
 | 03 | 市场数据、PIT 与历史股票池 | NOT STARTED | Phase 02 GO |
 | 04 | 确定性事件驱动回测 | NOT STARTED | Phase 03 GO |
@@ -35,4 +35,4 @@
 - Branch: `phase-00-audit-governance`
 - Plan: `docs/plans/PHASE_00_PLAN.md`
 - Status: `docs/status/PHASE_00.md`
-- Required next action: repair the first independent Review findings, obtain read-only re-review GO, then wait for the Phase 00 PR merge before Phase 01.
+- Required next action: user reviews and merges Phase 00 PR #1 into the personal Fork's `Main`; only then begin Phase 01.
