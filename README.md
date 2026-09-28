@@ -4,7 +4,7 @@
 
 # 🤖 AI量化交易操盘手
 
-**一站式AI量化交易平台 · 从学习、模拟到实盘**
+**量化学习与示例资料 · 受控 A 股研究平台建设中**
 
 [**ENGLISH VERSION**](https://github.com/charliedream1/ai_quant_trade/blob/master/README_EN.md)
 
@@ -23,6 +23,8 @@
 <img src=".README_images/公众号链接.png" width="150" alt="微信公众号" />
 
 </div>
+
+> **本 Fork 的安全状态（Phase 00）：** 下文保留上游的历史教程、功能介绍与回测展示，供学习和审计，不代表本 Fork 已实现或通过实盘验收。旧示例未经统一的时点数据、交易规则、风控、OMS、账本与券商对账验证；请勿将其连接真实账户或据此下单。回测收益不是投资建议或未来收益保证。当前阶段状态与门槛见 [Phase 00 报告](docs/status/PHASE_00.md) 和 [质量门槛](docs/acceptance/QUALITY_GATES.md)。
 
 ---
 
@@ -44,12 +46,12 @@
 
 | 🎯 定位 | 📌 说明 |
 |:---:|:---|
-| 🏦 **一站式平台** | 从学习、模拟到实盘，全流程覆盖 |
+| 🏦 **学习与研究资料** | 保留上游示例；本 Fork 的可验证核心仍在分阶段建设 |
 | 📈 **多元策略** | 大模型、因子挖掘、传统策略、机器学习、深度学习、强化学习、图网络、高频交易 |
 | 📚 **资源汇总** | 全网资源汇总、实战案例、论文解读、代码实现 |
 | 🛠️ **辅助工具** | 辅助盯盘、股票推荐等实用操盘工具 |
 | 🌍 **多市场覆盖** | 覆盖股票、基金、加密货币等多个市场 |
-| 🚀 **实盘部署** | 支持 Python/C++/CPU/GPU 等多种部署方式 |
+| 🚀 **实盘状态** | 尚未通过实盘工程验收；真实下单默认关闭，旧示例仅供参考 |
 
 ---
 
@@ -68,7 +70,7 @@
 | **时间** | **特性** |
 |:---|:---|
 | 2023.04.09 | [**StructBERT市场情绪分析**](https://github.com/charliedream1/ai_quant_trade/tree/master/egs_fin_nlp/emotion_analysis/01_StructBert_Binary_Class) |
-| 2023.03.28 | [**强化学习多股票交易：年化收益53%**](https://github.com/charliedream1/ai_quant_trade/tree/master/egs_trade/rl/a002_finRL_tutorial/a01_Stock_NeurIPS2018) |
+| 2023.03.28 | [**强化学习多股票交易：上游历史回测展示（未复核）**](https://github.com/charliedream1/ai_quant_trade/tree/master/egs_trade/rl/a002_finRL_tutorial/a01_Stock_NeurIPS2018) |
 | 2023.02.28 | [**机器学习自动挖掘5000个因子及股票趋势预测**](https://github.com/charliedream1/ai_quant_trade/tree/master/egs_alpha/auto_alpha/tsfresh) |
 | 2023.02.05 | [**利用EXCEL看盘**](https://github.com/charliedream1/ai_quant_trade/tree/master/egs_aide/%E7%9C%8B%E7%9B%98%E7%A5%9E%E5%99%A8/v1) |
 | 2023.01.01 | [**本地深度强化学习策略**](https://github.com/charliedream1/ai_quant_trade/tree/master/egs_trade/rl/a001_proto_sb3) |
@@ -171,6 +173,8 @@ cd egs_trade/rl/a002_finRL_tutorial/a01_Stock_NeurIPS2018
 
 **回测结果：**
 
+> 以下数字是上游历史示例展示，未经过本 Fork 的数据时点、成本、样本外和可重复性验收，不构成策略有效性或未来收益证据。
+
 | **序号** | **策略** | **市场** | **年化收益** | **最大回撤** | **夏普率** |
 |:---:|:---|:---|:---:|:---:|:---:|
 | 1 | [原型](egs_trade/rl/a001_proto_sb3) | 中国A股 | — | — | — |
@@ -190,9 +194,11 @@ cd egs_trade/rl/a002_finRL_tutorial/a01_Stock_NeurIPS2018
 
 ---
 
-## 💰 实盘交易
+## 💰 上游实盘相关示例（未验收）
 
 > 📁 **代码目录**：[egs_trade](egs_trade)
+
+> 下列 Wind 示例不是本 Fork 的受控实盘接口；没有 OMS、幂等、对账和 kill switch 验收，不得连接真实账户或执行订单。
 
 ### 实盘模拟
 
