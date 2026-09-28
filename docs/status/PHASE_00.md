@@ -2,7 +2,7 @@
 
 ## Status
 
-PARTIAL — the first and second independent Reviews returned NO-GO. The first review's findings were remediated; the second identified a P1 lookahead misstatement and a P2 omitted-test inventory. Both are corrected in Phase 00 documents, but a third independent review remains pending.
+COMPLETE for Phase 00 implementation and independent review — the first and second Reviews returned NO-GO, their documentation findings were corrected, and a third independent read-only Review returned GO with no unresolved current-phase P0/P1. Delivery remains pending the user's merge of PR #1 into the personal Fork's `Main`; Phase 01 has not started.
 
 ## Scope
 
@@ -104,6 +104,13 @@ The independent reviewer separately ran the eight local-fixture tests in a tempo
 
 The second review identified that `_rebalance()` sizes current-open orders through `_mark_to_market(..., trade_date)` and `_position_value(..., trade_date)`, which reads the final close for `trade_date`. Its read-only mutation reproduction changed only that close while holding open prices and previous-day targets fixed, yet changed opening orders. This is a P1 no-lookahead defect in the existing example, not a passing feature. The Phase 00 response is to document, isolate and assign it to Phase 04; correcting runtime behavior is out of scope here.
 
+### Third independent read-only Review (2026-09-28)
+
+- Reviewer task: `01a0e767-887a-7e83-8ed5-3c568fd98652`; decision: **GO for Phase 00 only**, no new current-phase blocking finding. The reviewer reported P00-01 through P00-10 as PASS and made no file, commit, or PR changes.
+- The reviewer independently reproduced the same-day-close leak: changing only the current day's final close from 10 to 11, with open price, initial holdings and previous-day targets fixed, changed AAA opening buy quantity from 500 to 400 shares. The existing eight tests remain insufficient to establish no-lookahead correctness; `R-BT-001` stays OPEN for Phase 04.
+- The reviewer confirmed 11 desktop-helper test modules/156 test functions and four broker-research test functions, including the Eastmoney test not protected under pytest by `SKIP_NETWORK_TEST`. `R-TEST-002` stays OPEN for Phase 01.
+- Its offline selected baseline ran 8/8 tests successfully, selected-source syntax checks passed, and Flake8 still reported 24 legacy findings. It also checked the 18 required governance paths, template provenance, whitespace, and local/remote tree equality. It did not run provider/broker paths, full-repository pytest or a new root dependency installation.
+
 ## Acceptance matrix
 
 | Criterion | PASS/FAIL/BLOCKED | Evidence |
@@ -116,9 +123,9 @@ The second review identified that `_rebalance()` sizes current-open orders throu
 | Existing install/tests/static checks have truthful results and an explicit discovery boundary | PASS locally | Baseline report includes PASS/FAIL outcomes; other test trees inventoried but not run |
 | Required risks include lookahead, survivorship, fees, duplicate orders, ledger drift, secrets and broker uncertainty | PASS | Risk register |
 | Required Phase 00 files exist and target-only paths are labeled | PASS | Final required-path validation |
-| Repository and documentation entrypoints do not imply verified live readiness | PASS locally | Safety notices and qualified claims added; independent re-review pending |
+| Repository and documentation entrypoints do not imply verified live readiness | PASS | Safety notices and qualified claims verified by third reviewer |
 | No new strategy, backtest, factor, OMS or broker implementation | PASS | Git diff scope |
-| Independent reviewer gives GO with no unresolved current-phase P0/P1 finding | BLOCKED | First and second Reviews returned NO-GO; third review pending; this row records the reviewer outcome rather than deciding it |
+| Independent reviewer gives GO with no unresolved current-phase P0/P1 finding | PASS | Third independent read-only Review `01a0e767-887a-7e83-8ed5-3c568fd98652`: GO for Phase 00 only |
 
 ## Risks and limitations
 
@@ -138,7 +145,7 @@ The second review identified that `_rebalance()` sizes current-open orders throu
 - `P2-01` — ACCEPT: recorded exact follow-up inventory, copy-comparison, tracked-path, filename-only secret-scan and whitespace commands above. The original shell transcript is not claimed to have been reconstructed.
 - `R2-P1-01` — ACCEPT: corrected the false no-lookahead claim in inventory/current-state/reuse documents and registered `R-BT-001` with Phase 04 owner, isolation rule and mutation-test gate. The existing strategy is intentionally unchanged in Phase 00.
 - `R2-P2-01` — ACCEPT: inventoried both omitted test trees, stated that they were not run, and registered `R-TEST-002` so Phase 01 CI cannot silently discover the Eastmoney network test.
-- No finding is self-closed as GO; both independent Review decisions remain NO-GO until a new read-only reviewer issues GO.
+- `R3` — third independent read-only Review issued GO for Phase 00 after checking both remediation rounds and all ten acceptance items. The earlier two NO-GO decisions remain part of the audit trail; no legacy/future-phase risk is represented as fixed or live-ready.
 
 ## Out-of-scope confirmed
 
@@ -150,4 +157,4 @@ The second review identified that `_rebalance()` sizes current-open orders throu
 
 ## Next action
 
-Deliver the verified document-only remediation to the draft Phase 00 PR and request a third read-only review of the full branch relative to `Main`. Do not begin Phase 01 until the reviewer gives GO with no unresolved current-phase P0/P1 and the user merges the PR.
+The user reviews and merges PR #1 into the personal Fork's `Main`. Do not begin Phase 01 until that merge; then re-check the merged branch and create the Phase 01 branch.
