@@ -1,0 +1,28 @@
+name: Target package quality
+
+on:
+  push:
+    branches: [Main]
+  pull_request:
+    branches: [Main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.9.16"
+          enable-cache: true
+      - name: Install locked Python and dependencies
+        run: |
+          uv python install 3.11.14
+          uv sync --frozen --group dev
+      - name: Run deterministic offline quality checks
+        run: make all
+      - name: Audit installed dependencies
+        run: make audit
