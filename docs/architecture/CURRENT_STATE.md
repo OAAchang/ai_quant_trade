@@ -37,7 +37,7 @@ broker contract, configuration boundary, or installable application runtime.
 ## Research and backtest flow
 
 - The legacy double-MA path combines data preparation, signal, portfolio sizing, accounting, fees, metrics and reporting through mutable objects/dataframes.
-- The newer momentum example improves signal/execution timing and provides local-fixture tests, but remains a monolithic example with float accounting and idealized fills.
+- The newer momentum example uses previous-day target selection and next-open execution, but current-open order sizing reads that same day's final close through `_mark_to_market()` / `_position_value()`. This is a lookahead defect, despite eight local-fixture tests. It remains a monolithic example with float accounting and idealized fills.
 - Multiple metric implementations exist with different conventions. The legacy beta implementation is demonstrably incorrect, and no golden formula suite establishes authoritative behavior.
 - Parameter ranking uses test-period CAGR in the current example flow, so it is not an unbiased final out-of-sample protocol.
 
@@ -50,7 +50,8 @@ broker contract, configuration boundary, or installable application runtime.
 
 ## Test and delivery state
 
-- Eight automated tests cover the momentum example with local fixtures.
+- The selected baseline covers the momentum example with eight local-fixture tests; they do not cover the same-day-close order-sizing leak.
+- Separate test trees exist under `egs_aide/看盘神器/v2/tests/` (11 modules, 156 test functions) and `egs_skill/broker-research-analyst/tests/` (four test functions). They were not run in the Phase 00 baseline; the broker-research tree contains an unguarded pytest-collected Eastmoney network test. Default CI must use an explicit offline test scope.
 - No behavioral tests cover legacy accounting, fee rules, metrics, T+1, suspensions, limits, partial fills, duplicate messages, reconciliation, or recovery.
 - Static analysis currently reports 24 findings in the selected core/example/test paths.
 - No type checker, coverage threshold, migration framework, secret scanner, dependency audit or software bill of materials is configured.
