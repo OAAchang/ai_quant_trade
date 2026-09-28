@@ -21,7 +21,7 @@ The local `upstream` remote fetches from the canonical repository and has push U
 | Path | Observed purpose | Evidence | Disposition |
 |---|---|---|---|
 | `quant_brain/` | Small legacy data, backtest, metric, portfolio, rule and RL modules | Python modules under `back_test/`, `data_io/`, `portfolio/`, `rules/`, `rl/` | REFERENCE ONLY; selected semantics may migrate after tests |
-| `egs_trade/vanilla/momentum_rotation/` | Newer A-share momentum backtest with CSV/Tushare input and reports | Has dataclasses, prior-day decisions, next-open execution and the only automated tests | MIGRATE AFTER VALIDATION |
+| `egs_trade/vanilla/momentum_rotation/` | Newer A-share momentum backtest with CSV/Tushare input and reports | Has dataclasses and prior-day selection, but open-order sizing reads same-day close; eight scoped fixture tests exist | MIGRATE AFTER VALIDATION |
 | `egs_trade/vanilla/double_ma/` | Legacy vector/dataframe double-MA backtest | Calls `quant_brain` account, fee and metric helpers | REFERENCE ONLY |
 | `egs_trade/ms_qlib/` | Qlib installation, data and strategy tutorials | Markdown, notebook and one data script; separate `pyqlib` requirement | REFERENCE ONLY until Phase 09 |
 | `egs_trade/rl/` | Stable-Baselines/FinRL tutorials and bundled datasets | Old pinned Gym/Torch stack, notebooks, CSV data | REFERENCE ONLY |
@@ -33,6 +33,8 @@ The local `upstream` remote fetches from the canonical repository and has push U
 | `egs_fin_nlp/`, `egs_llm/` | NLP and LLM training/application examples | Heavy independent dependency stacks | OUT OF V1 CORE; REFERENCE ONLY |
 | `egs_courses/`, `ai_notes/`, `a_全网优秀资源/` | Courses, notes and external-resource catalog | Documentation-heavy learning material | DIRECT REUSE as learning/reference content only |
 | `egs_skill/` | A broker research helper skill and examples | Own requirements and `.env.example` | REFERENCE ONLY; security/provenance review required |
+| `egs_aide/看盘神器/v2/tests/` | Desktop watch-market helper tests | 11 test modules and 156 `test_*` functions, outside the selected momentum baseline | REFERENCE ONLY; test isolation/dependency audit in Phase 01 |
+| `egs_skill/broker-research-analyst/tests/` | Broker research helper tests | Four `test_*` functions; one calls the public Eastmoney endpoint during pytest collection/execution | REFERENCE ONLY; never include its network test in default CI |
 | `tools/`, `src/tools/` | Logging, file, date, plotting and NLP utilities | Two overlapping tool trees; hidden cwd/global assumptions | MIGRATE AFTER VALIDATION or DEPRECATE duplicates |
 | `unit_test/` | Tests and local fixtures | One `unittest` module with eight tests | DIRECT REUSE as baseline evidence; expand later |
 | `runtime/` | Placeholder documentation | `README.md` contains only “系统部署使用” | DEPRECATE placeholder; target runtime is separate |
@@ -65,7 +67,7 @@ The local `upstream` remote fetches from the canonical repository and has push U
 - The legacy double-MA path uses mutable pandas state, floating-point cash, string order types, static rule parameters, and no event ledger.
 - `quant_brain/back_test/cal_fee.py` computes commission rate times share count rather than transaction value and uses nondeterministic random slippage when configured.
 - `quant_brain/back_test/risk_indicator.py` assigns benchmark covariance to both beta numerator and denominator, making beta invalid; several other metrics are marked TODO/FIXME.
-- The momentum example correctly separates a previous available decision date from current open execution, but still lacks exchange calendars, T+1 lots, suspensions, price limits, dated fees, liquidity fills, immutable events, and Decimal accounting.
+- The momentum example selects targets from a previous available date, but its current-open rebalance sizing is **not** point-in-time safe: `_rebalance()` calls `_mark_to_market(..., trade_date)` and `_position_value(..., trade_date)`, which read `self.close.at[trade_date, code]`, the final close unavailable at that open. Changing only that day's close can change that day's opening orders even when opening prices and previous-day targets are fixed. Do not migrate this sizing logic without a no-lookahead mutation test and correction in Phase 04. It also lacks exchange calendars, T+1 lots, suspensions, price limits, dated fees, liquidity fills, immutable events, and Decimal accounting.
 - Parameter selection sorts by test-period CAGR, so the current report flow is not a frozen out-of-sample evaluation process.
 - No standardized factor lab, IC/RankIC/ICIR pipeline, no-lookahead mutation suite, or run manifest exists.
 
@@ -77,7 +79,8 @@ The local `upstream` remote fetches from the canonical repository and has push U
 
 ## Testing and delivery domain
 
-- `unit_test/test_momentum_rotation.py` contains eight deterministic tests using local CSV fixtures and temporary output directories.
+- The selected Phase 00 baseline ran only `unit_test/test_momentum_rotation.py`: eight deterministic tests using local CSV fixtures and temporary output directories. These tests do not detect the same-day-close sizing leak above.
+- Two other test domains were inventoried but not executed in Phase 00: `egs_aide/看盘神器/v2/tests/` (11 modules, 156 `test_*` functions) and `egs_skill/broker-research-analyst/tests/test_adapter.py` (four functions). In the latter, `test_fetch_stock_reports()` directly contacts Eastmoney; its `SKIP_NETWORK_TEST` guard exists only under `if __name__ == "__main__"`, so it does not protect pytest collection. Phase 01 must explicitly scope offline CI test roots or add a genuine test-level network guard before broader discovery; do not run full-repository pytest by default.
 - No tests were found for legacy fee calculation, beta/alpha, cash/position conservation, broker calls, replay/recovery, or adapter contracts.
 - The sole GitHub Actions workflow builds and deploys documentation from `master`; it does not run tests, lint, type checking, secret scanning, or dependency auditing and is stale relative to default branch `Main`.
 - No installable package metadata, lock file, typed settings, migrations, SBOM, deployment definition, or structured observability stack exists.

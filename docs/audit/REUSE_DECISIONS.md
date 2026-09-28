@@ -13,9 +13,9 @@
 |---|---|---|
 | Root `LICENSE`, Git history, original copyright headers | DIRECT REUSE | Retain unchanged and include in distributions |
 | Project charter/context/governance templates | DIRECT REUSE for project governance | Track source and modifications |
-| Local momentum CSV fixtures and eight tests | DIRECT REUSE as baseline tests | Pin compatible test environment in Phase 01 |
+| Local momentum CSV fixtures and eight tests | DIRECT REUSE as narrow baseline tests, not proof of no-lookahead safety | Pin compatible test environment in Phase 01; add future-close mutation coverage in Phase 04 |
 | General learning documentation and resource indexes | DIRECT REUSE as reference content | Fix only factual/path drift when encountered |
-| Momentum decision/execution separation | MIGRATE AFTER VALIDATION | No-lookahead mutation tests, calendar semantics, run manifest |
+| Momentum prior-day target selection / next-open scheduling | MIGRATE AFTER VALIDATION; do not copy current-open sizing | Fix same-day-close sizing leak, prove order invariance under future-close mutation, define calendar semantics and run manifest in Phase 04 |
 | Momentum CSV reader and provider boundary | MIGRATE AFTER VALIDATION | PIT schema, immutable raw store, provider contract and quality tests |
 | Momentum cost/report/metric code | MIGRATE AFTER VALIDATION | Decimal boundary, dated fees, benchmark alignment and formula golden tests |
 | `quant_brain` account/portfolio concepts | REFERENCE ONLY | Replace with immutable domain model and append-only ledger in Phase 02 |

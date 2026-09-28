@@ -23,7 +23,7 @@ All installation attempts used disposable `mktemp` virtual environments outside 
 | `git remote -v` | 0 | `origin` is the personal fork; `upstream` fetches canonical repo and push is `no_push` |
 | `git ls-remote --symref upstream HEAD` | 0 | Upstream HEAD is `refs/heads/master` at the audited commit |
 
-This verifies the previously completed clone/fork state; Phase 00 did not push or write to either GitHub repository.
+This verifies the previously completed clone/fork state at the initial 2026-09-10 baseline. The baseline run did not push or write to either GitHub repository; subsequent documentation delivery to the personal fork is recorded in `docs/status/PHASE_00.md`.
 
 ## Dependency installation baseline
 
@@ -67,7 +67,11 @@ To distinguish a broken root manifest from test behavior, a second disposable ve
 - Data boundary: repository-local fixtures only; no Tushare token and no provider/broker call.
 - Warnings: Matplotlib emitted PyParsing deprecation warnings.
 
-This is useful positive evidence for the momentum example only. It does not validate the root dependency file, legacy core, A-share execution semantics, or live safety.
+This is useful positive evidence for the momentum example only. It does not detect its same-day-close opening-order sizing leak, nor validate the root dependency file, legacy core, A-share execution semantics, or live safety.
+
+### Test discovery boundary
+
+The command above deliberately targets `unit_test/`; it is **not** a whole-repository test result. A later inventory identified `egs_aide/看盘神器/v2/tests/` (11 modules, 156 `test_*` functions) and `egs_skill/broker-research-analyst/tests/test_adapter.py` (four functions). Neither tree was run in Phase 00. The latter includes `test_fetch_stock_reports()`, which calls the public Eastmoney endpoint. Its `SKIP_NETWORK_TEST` check is only in the script's `__main__` block, so setting that variable does not prevent pytest from running the test. Phase 01 must select offline test roots explicitly and verify network denial before extending discovery; running repository-wide pytest is not a safe baseline command.
 
 ## Syntax baseline
 
