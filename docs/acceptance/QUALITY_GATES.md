@@ -16,8 +16,8 @@
 | G-02 | Reproducible install | Python 3.11 environment installs from committed lock | clean install command | PASS for Phase 01 target package; legacy tree excluded |
 | G-03 | Formatting/lint | Formatter check and lint finish without modifying files | CI logs | PASS locally and on hosted CI for Phase 01 paths |
 | G-04 | Types | Public/core API type check passes | mypy/pyright logs | PASS locally and on hosted CI for Phase 01 paths; later core unimplemented |
-| G-05 | Unit behavior | Domain/metrics/rules unit and golden tests pass | pytest report | PARTIAL: Phase 01 settings/logging/tooling tests pass; domain/metrics/rules absent |
-| G-06 | Invariants | Property tests prove cash/position conservation, idempotency and replay | seeded test report | NOT CONFIGURED |
+| G-05 | Unit behavior | Domain/metrics/rules unit and golden tests pass | pytest report | PARTIAL project-wide: Phase 02 domain tests and independent Review pass; metrics/rules await later phases |
+| G-06 | Invariants | Property tests prove cash/position conservation, idempotency and replay | seeded test report | Phase 02 deterministic generated suite and independent Review pass; durable recovery awaits later phases |
 | G-07 | PIT/no-lookahead | Future-data mutation cannot alter earlier signals/orders/fills | mutation test report | NOT CONFIGURED |
 | G-08 | Integration | data → strategy → risk → order → fill → ledger deterministic path | fixture artifact checksums | NOT CONFIGURED |
 | G-09 | Broker contract | All adapters satisfy states, duplicate/late/unknown and recovery cases | offline contract suite | NOT CONFIGURED |
@@ -57,3 +57,18 @@ Phase 00 implementation can be COMPLETE while the project-wide baseline remains 
 | P01-09 | Independent reviewer gives GO with no current-phase P0/P1 findings | Review task `01a0e814-df8e-7ab1-9c4e-766ec9d2daf5` | PASS — first Review NO-GO, follow-up GO after fixes |
 
 Phase 01 must not progress to Phase 02 until the user merges PR #2 into the personal Fork's `Main` and the merged tree is verified. The hosted CI result is scoped to the Phase 01 head; it does not certify future trading behavior.
+
+## Phase 02 acceptance
+
+| ID | Criterion | Evidence | Status |
+|---|---|---|---|
+| P02-01 | Pure domain with required typed objects and aware time | `src/ai_quant_trade/domain/`, boundary and constructor tests | PASS locally |
+| P02-02 | Decimal/integer accounting with explicit tick/fee rounding | ADR-0003, cent-allocation and ambient-precision tests | PASS locally |
+| P02-03 | Balanced append-only journal, idempotent fill and replay-equivalent snapshot | ADR-0004, generated conservation/replay tests | PASS locally |
+| P02-04 | Legal order transitions and UNKNOWN fail-closed semantics | ADR-0005, transition and negative tests | PASS locally |
+| P02-05 | Acquisition/sellable/frozen quantity and T+1 boundary | Same-day denial, next-day sale, open-sell reservation tests | PASS locally |
+| P02-06 | Schema-v1 round-trip/version rejection | Serialization tests | PASS locally |
+| P02-07 | Full local validation and offline minimum example | Post-F-06 `make all`: 68 tests, 93.51% branch coverage; `make audit` | PASS locally |
+| P02-08 | Independent reviewer GO with no current-stage P0/P1 | First Review NO-GO; follow-up GO closed F-01–F-05; final narrow GO closed F-06 | PASS — no open finding |
+
+Phase 02 implementation and independent Review are GO. No Phase 03 work or real-order capability is authorized until the user-directed publication/merge gate is separately satisfied and the merged Main tree is verified.

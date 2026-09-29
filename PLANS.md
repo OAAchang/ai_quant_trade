@@ -15,8 +15,8 @@
 | Phase | Scope | Status | Gate |
 |---|---|---|---|
 | 00 | Fork、现状审计与治理基线 | COMPLETE; PR #1 user-merged into Main | GO obtained and merge verified |
-| 01 | 新工程骨架、依赖与 CI | Independent Review GO and hosted CI PASS; PR #2 awaits user merge | User PR merge and Main tree verification |
-| 02 | 领域模型、账户账本与不变量 | NOT STARTED | Phase 01 GO, user merge of PR #2, verified Main tree |
+| 01 | 新工程骨架、依赖与 CI | COMPLETE; PR #2 user-merged into Main, tree verified | GO obtained and merge verified |
+| 02 | 领域模型、账户账本与不变量 | Implementation COMPLETE; independent Review GO; PR #3 open against Main | Await CI and user review/merge; verify Main tree before Phase 03 |
 | 03 | 市场数据、PIT 与历史股票池 | NOT STARTED | Phase 02 GO |
 | 04 | 确定性事件驱动回测 | NOT STARTED | Phase 03 GO |
 | 05 | A 股规则、费用、滑点与成交 | NOT STARTED | Phase 04 GO |
@@ -32,7 +32,8 @@
 
 ## Current execution
 
-- Branch: `phase-01-foundation-ci`
-- Plan: `docs/plans/PHASE_01_PLAN.md`
-- Status: `docs/status/PHASE_01.md`
-- Required next action: user reviews and merges Phase 01 PR #2 into the personal Fork's `Main`; verify its merged tree before any Phase 02 work.
+- Branch: `phase-02-domain-ledger`
+- Base: user-merged `origin/Main` at `8864452` (tree `16c200a9` matches reviewed Phase 01 final tree).
+- Plan: `docs/plans/PHASE_02_PLAN.md`
+- Status: `docs/status/PHASE_02.md`
+- Phase 02 reviewed content is published in [PR #3](https://github.com/OAAchang/ai_quant_trade/pull/3). GitHub web upload was used because HTTPS Git push lacked credentials and the connector lacked write permission; the remote Git tree was verified equal to local reviewed commit `e190930b` before the PR was opened. Do not auto-merge; after user merge, verify Main before Phase 03.
