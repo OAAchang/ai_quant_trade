@@ -2,7 +2,7 @@
 
 ## Status
 
-COMPLETE for implementation and independent Review — first Review returned NO-GO (F-01/F-02 P0, F-03 P1, F-04/F-05 P2); follow-up Review closed F-01–F-05 and returned GO; final narrow Review closed F-06 P2 and confirmed GO. No Phase 03 work, commit, push, PR or merge has occurred in this phase. Publication and user merge remain separate gates.
+COMPLETE for implementation and independent Review — first Review returned NO-GO (F-01/F-02 P0, F-03 P1, F-04/F-05 P2); follow-up Review closed F-01–F-05 and returned GO; final narrow Review closed F-06 P2 and confirmed GO. [PR #3](https://github.com/OAAchang/ai_quant_trade/pull/3) is open against the personal Fork's `Main`; it has not been merged. No Phase 03 work has occurred. User merge remains a separate gate.
 
 ## Scope completed
 
@@ -40,6 +40,10 @@ COMPLETE for implementation and independent Review — first Review returned NO-
 | Post-F-06 `make all` | 0 | Unit 66/66, integration 2/2, combined 68/68, branch coverage 93.51%; all other checks passed. |
 | Post-F-06 `make audit` | 0 | No known vulnerabilities reported at check time. |
 | Independent full re-review and narrow F-06 re-review | GO both | Reviewer independently reran `make all`/`make audit`, original F-01–F-06 cases and 40 additional generated multi-lot cases; no open finding. |
+| Pre-publication `make all`, `make audit`, `uv run --frozen --offline --group dev pre-commit run --all-files` | 0 each | 68 tests, 93.51% branch coverage; no known locked-dev-dependency vulnerability; all pre-commit hooks passed. |
+| `git push -u origin phase-02-domain-ledger` | 128 | HTTPS credential prompt unavailable; no remote push occurred from CLI. |
+| GitHub web branch upload and `git fetch origin phase-02-domain-ledger` | 0 | Published 20 Phase 02 files; remote Git tree `b985782499f55ae07affd60246280ad0e521729e` equals reviewed local commit tree. |
+| GitHub PR creation | success | PR #3 opened against `Main` on 2026-09-29; hosted CI was queued when last checked. |
 
 The expected `pytest-socket` warning comes from the negative test that verifies sockets are blocked. It is not a successful network call.
 
@@ -76,4 +80,4 @@ No行情下载、回测事件循环、具体涨跌停/费用历史规则、数�
 
 ## Next action
 
-The user authorized committing, pushing and opening a Phase 02 PR on 2026-09-29. Publish the reviewed branch against the personal Fork's `Main`; do not auto-merge. After any user merge, verify the actual Main tree before Phase 03.
+The user authorized publication on 2026-09-29; [PR #3](https://github.com/OAAchang/ai_quant_trade/pull/3) is now open. Await hosted CI and user review/merge; do not auto-merge. After user merge, verify the actual Main tree before Phase 03.
